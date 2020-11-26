@@ -1,19 +1,11 @@
 const express = require('express');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
-// Authentication-checking middleware
-router.use((req, res, next) => {
-	if (!req.isAuthenticated()) {
-		res.status(401).json({
-			status: 401,
-			message: 'User is not logged in',
-		});
-	} else {
-		next();
-	}
-});
+router.use(checkAuth()); // Authentication-checking middleware
 
+// Send user info
 router.get('/', (req, res) => res.json({ status: 200, user: req.user }));
 
 router.post('/logout', (req, res) => {
