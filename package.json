@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"main": "./src/server/index.js",
 	"repository": "https://github.com/ElCholoGamer/todo-list-on-steroids.git",
+	"homepage": "https://github.com/ElCholoGamer/todo-list-on-steroids/blob/main/README.md",
 	"author": "ElCholoGamer <josedanielgrayson@gmail.com>",
 	"license": "MIT",
 	"private": true,

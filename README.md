@@ -8,10 +8,11 @@ Well I guess I should leave a usage guide or something
 
 <br />
 
-Clone the repo:
+Clone the repo and select directory:
 
 ```
 $ git clone https://github.com/ElCholoGamer/todo-list-on-steroids.git
+$ cd todo-list-on-steroids
 ```
 
 Install dependencies (yarn) and build:
