@@ -6,7 +6,6 @@ require('dotenv').config();
 const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
-	token: String,
 });
 
 UserSchema.methods.encryptPassword = function (rounds = 10) {
