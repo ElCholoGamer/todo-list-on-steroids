@@ -19,7 +19,7 @@ module.exports = merge(common, {
 				bypass: req =>
 					req.method === 'GET' &&
 					req.headers.accept?.indexOf('text/html') !== -1
-						? false // Skip proxy
+						? '/index.html' // Skip proxy
 						: null, // Continue with proxy
 			},
 		},

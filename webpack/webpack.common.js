@@ -11,9 +11,9 @@ module.exports = {
 	context,
 	entry: join(context, 'src/app/index.jsx'),
 	output: {
-		filename: '[name].[contenthash].js',
+		filename: 'js/[name].[contenthash].js',
 		path: join(context, 'build'),
-		chunkFilename: '[name].[contenthash].chunk.js',
+		chunkFilename: 'js/[name].[contenthash].chunk.js',
 		publicPath: '/',
 	},
 	resolve: {
@@ -38,7 +38,7 @@ module.exports = {
 		],
 	},
 	plugins: [
-		new MiniCssExtractPlugin(),
+		new MiniCssExtractPlugin({ filename: 'css/[name].css' }),
 		new HtmlWebpackPlugin({ template: join(context, 'public/index.html') }),
 		new CopyWebpackPlugin({ patterns: [{ from: 'public/' }] }),
 		new CleanWebpackPlugin(),
