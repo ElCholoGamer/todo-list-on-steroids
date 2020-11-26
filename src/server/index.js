@@ -8,6 +8,7 @@ const { resolve, join } = require('path');
 const initPassport = require('./passport');
 const initDatabase = require('./database');
 const indexRouter = require('./routes');
+const userRouter = require('./routes/user');
 
 // Initialization
 const app = express();
@@ -34,15 +35,23 @@ app.use(morgan('common')); // Request logger
 
 // Routes
 app.use('/', indexRouter);
+app.use('/user', userRouter);
 
 // Static files and React app
 if (!process.argv.includes('--dev')) {
 	const BUILD = resolve(__dirname, '../../build');
 
 	app.use(express.static(BUILD));
-	app.get('*', (req, res) => res.sendFile(join(BUILD, 'index.html')));
-} else {
-	console.log('Running in development mode');
+	app.get('*', (req, res, next) => {
+		if (
+			req.method === 'GET' &&
+			req.headers.accept?.indexOf('text/html') !== -1
+		) {
+			res.sendFile(join(BUILD, 'index.html'));
+		} else {
+			next();
+		}
+	});
 }
 
 // Database connection

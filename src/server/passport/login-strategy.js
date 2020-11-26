@@ -8,16 +8,15 @@ const loginStrategy = new LocalStrategy(
 		passwordField: 'password',
 	},
 	async (username, password, done) => {
-		console.log('Login strategy');
 		// Check if user exists
 		const user = await User.findOne({ username });
-		if (!user) return done(null, false, { message: "Username doesn't exist" });
+		if (!user)
+			return done(null, false, { status: 404, message: 'User not found' });
 
 		// Check if password is correct
 		if (!user.comparePassword(password))
-			return done(null, false, { message: 'Invalid password' });
+			return done(null, false, { status: 401, message: 'Incorrect password' });
 
-		console.log('Everything alright');
 		done(null, user); // Return authenticated user
 	}
 );

@@ -1,4 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
+const { hashSync } = require('bcrypt');
 
 const User = require('../models/user');
 
@@ -12,11 +13,14 @@ const registerStrategy = new LocalStrategy(
 		if (await User.findOne({ username }))
 			return done(null, false, { message: 'Username already exists' });
 
-		// Create user
+		// Create user document
 		const user = new User({
 			username,
 			password,
 		});
+
+		user.encryptPassword(); // Hash password for storing in database
+		// user.generateToken(); // Create session token
 
 		await user.save(); // Save user to database
 		done(null, user); // Return authenticated user
