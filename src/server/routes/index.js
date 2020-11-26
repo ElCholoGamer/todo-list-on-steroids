@@ -3,13 +3,8 @@ const passport = require('passport');
 
 const router = express.Router();
 
-router.post(
-	'/register',
-	passport.authenticate('local-register'),
-	(req, res) => {
-		console.log('User registered:', req.user);
-		res.json({ status: 200, user: req.user });
-	}
+router.post('/register', passport.authenticate('local-register'), (req, res) =>
+	res.json({ status: 200, user: req.user })
 );
 
 router.post('/login', (req, res, next) => {

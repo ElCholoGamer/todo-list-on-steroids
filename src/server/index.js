@@ -19,6 +19,8 @@ app.set('json replacer', (key, val) => (key === 'password' ? undefined : val));
 
 // Middleware
 app.use(cors()); // Allow access from cross-origin requests
+app.use(express.urlencoded({ extended: false })); // Body parser for urlencoded requests
+app.use(morgan('common')); // Request logger
 
 // Express session (Needed for passport)
 app.use(
@@ -33,9 +35,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.urlencoded({ extended: false })); // Body parser for urlencoded requests
-app.use(morgan('common')); // Request logger
-
 // Routes
 app.use('/', indexRouter);
 app.use('/user', userRouter);
@@ -46,10 +45,12 @@ if (!process.argv.includes('--dev')) {
 
 	app.use(express.static(BUILD));
 	app.get('*', (req, res, next) => {
-		if (
-			req.method === 'GET' &&
-			req.headers.accept?.indexOf('text/html') !== -1
-		) {
+		const {
+			method,
+			headers: { accept = '' },
+		} = req;
+
+		if (method === 'GET' && accept.indexOf('text/html') !== -1) {
 			res.sendFile(join(BUILD, 'index.html'));
 		} else {
 			next();

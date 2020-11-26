@@ -9,6 +9,8 @@ const registerStrategy = new LocalStrategy(
 		passwordField: 'password',
 	},
 	async (username, password, done) => {
+		username = username.trim(); // Trim username just in case
+
 		// Check if user with username already exists
 		if (await User.findOne({ username }))
 			return done(null, false, { message: 'Username already exists' });
@@ -20,9 +22,8 @@ const registerStrategy = new LocalStrategy(
 		});
 
 		user.encryptPassword(); // Hash password for storing in database
-		// user.generateToken(); // Create session token
-
 		await user.save(); // Save user to database
+
 		done(null, user); // Return authenticated user
 	}
 );
