@@ -14,6 +14,9 @@ const userRouter = require('./routes/user');
 const app = express();
 initPassport();
 
+// JSON replacer for password
+app.set('json replacer', (key, val) => (key === 'password' ? undefined : val));
+
 // Middleware
 app.use(cors()); // Allow access from cross-origin requests
 
