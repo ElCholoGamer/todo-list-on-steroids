@@ -2,24 +2,13 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from 'react-bootstrap/Navbar';
-import { useHistory } from 'react-router-dom';
 
 function Header({ user }) {
-	const history = useHistory();
-
 	const handleClick = e => {
-		switch (e.target.name) {
-			case 'login':
-				history.push('/login');
-				break;
-			case 'register':
-				history.push('/register');
-				break;
-			case 'logout':
-				fetch('/user/logout', { method: 'POST' })
-					.then(() => location.reload())
-					.catch(console.error);
-		}
+		e.target.disabled = true; // Disable button
+		fetch('/user/logout', { method: 'POST' }) // Post to logout route
+			.then(() => location.reload()) // Reload page when done
+			.catch(console.error);
 	};
 
 	return (
@@ -30,10 +19,10 @@ function Header({ user }) {
 				<Navbar.Text>
 					{!user ? (
 						<ButtonGroup>
-							<Button variant="info" name="login" onClick={handleClick}>
+							<Button variant="primary" href="/login">
 								Log In
 							</Button>
-							<Button variant="info" name="register" onClick={handleClick}>
+							<Button variant="primary" href="/register">
 								Register
 							</Button>
 						</ButtonGroup>
@@ -43,7 +32,6 @@ function Header({ user }) {
 							<Button
 								className="ml-3"
 								variant="outline-danger"
-								name="logout"
 								onClick={handleClick}>
 								Log Out
 							</Button>

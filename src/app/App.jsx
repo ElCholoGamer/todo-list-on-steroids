@@ -12,9 +12,9 @@ function App() {
 
 	React.useEffect(() => {
 		axios
-			.get('/user')
-			.then(res => setUser(res.data.user))
-			.catch(() => null);
+			.get('/user') // Get user info
+			.then(res => setUser(res.data.user)) // Set user info to state
+			.catch(() => null); // Ignore errors
 	}, []);
 
 	return (

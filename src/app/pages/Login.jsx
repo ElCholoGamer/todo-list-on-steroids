@@ -15,17 +15,19 @@ function Login() {
 		setData({ ...data, [target.name]: target.value });
 
 	const handleClick = () => {
-		if (!data.username || !data.password) return;
+		// Check that all values aren't empty
+		if (Object.values(data).some(v => !v.trim())) return;
 
 		axios
 			.post('/login', stringify(data), {
+				// Post data to login route
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			})
-			.then(res => {
-				if (res.status !== 200) setMessage(res.data.message || 'Unknown error');
-				else location.href = '/';
-			})
-			.catch(console.error);
+			.then(() => (location.href = '/')) // Redirect to homepage after login
+			.catch(err => {
+				const { data = {} } = err.response || {};
+				setMessage(data.message || 'Unknown error');
+			});
 	};
 
 	const { username, password } = data;
