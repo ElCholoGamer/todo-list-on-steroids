@@ -1,6 +1,6 @@
 # Todo List On Steroids
 
-Lmao, who actually needs one of these nowadays?
+I swear I totally regret not using TypeScript lmfao
 
 Well I guess I should leave a usage guide or something
 
