@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from 'react-bootstrap/Navbar';
 import { useHistory } from 'react-router-dom';
 
@@ -28,24 +29,20 @@ function Header({ user }) {
 			<Navbar.Collapse className="justify-content-end">
 				<Navbar.Text>
 					{!user ? (
-						<>
-							<Button
-								className="mx-3"
-								variant="primary"
-								name="login"
-								onClick={handleClick}>
+						<ButtonGroup>
+							<Button variant="info" name="login" onClick={handleClick}>
 								Log In
 							</Button>
 							<Button variant="info" name="register" onClick={handleClick}>
 								Register
 							</Button>
-						</>
+						</ButtonGroup>
 					) : (
 						<>
-							Logged in as {user.username}
+							Logged in as: <span className="text-light">{user.username}</span>
 							<Button
 								className="ml-3"
-								variant="danger"
+								variant="outline-danger"
 								name="logout"
 								onClick={handleClick}>
 								Log Out
