@@ -6,7 +6,7 @@ const common = require('./webpack.common');
 
 module.exports = merge(common, {
 	mode: 'development',
-	devtool: 'eval-source-map',
+	devtool: 'inline-source-map',
 	devServer: {
 		hot: true,
 		historyApiFallback: true,
@@ -15,7 +15,7 @@ module.exports = merge(common, {
 		contentBase: resolve(__dirname, '../build'),
 		proxy: {
 			'/': {
-				target: 'http://localhost:8080',
+				target: 'http://localhost:5000',
 				bypass: req =>
 					req.method === 'GET' &&
 					req.headers.accept?.indexOf('text/html') !== -1
