@@ -1,5 +1,7 @@
 # Todo List On Steroids
 
+![Build badge](https://github.com/ElCholoGamer/todo-list-on-steroids/workflows/Build/badge.svg)
+
 I swear I totally regret not using TypeScript lmfao
 
 Well I guess I should leave a usage guide or something
