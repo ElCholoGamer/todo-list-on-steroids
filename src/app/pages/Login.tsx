@@ -15,9 +15,9 @@ const Login: React.FC = () => {
 		// Check that all values aren't empty
 		if (Object.values(data).some(v => !v.trim())) return;
 
+		// Post data to login route
 		axios
-			.post('/login', stringify(data), {
-				// Post data to login route
+			.post('/auth/login', stringify(data), {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			})
 			.then(() => (location.href = '/')) // Redirect to homepage after login
@@ -53,7 +53,8 @@ const Login: React.FC = () => {
 						type="password"
 					/>
 					<Form.Text className="text-muted">
-						We will never share your password with anyone.
+						We will never share your password with anyone. (Even though some
+						hacker could leak our database)
 					</Form.Text>
 				</Form.Group>
 
