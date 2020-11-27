@@ -1,17 +1,14 @@
 import axios from 'axios';
 import React from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { stringify } from '../utils';
 
-const stringify = obj =>
-	Object.keys(obj)
-		.map(key => `${key}=${obj[key]}`)
-		.join('&');
-
-function Login() {
+const Login: React.FC = () => {
 	const [data, setData] = React.useState({ username: '', password: '' });
 	const [message, setMessage] = React.useState('');
 
-	const handleChange = ({ target }) =>
+	const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
 		setData({ ...data, [target.name]: target.value });
 
 	const handleClick = () => {
@@ -65,6 +62,6 @@ function Login() {
 			<p className="text-danger mt-3">{message}</p>
 		</div>
 	);
-}
+};
 
 export default Login;

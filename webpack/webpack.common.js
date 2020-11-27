@@ -3,13 +3,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 
 const context = resolve(__dirname, '..');
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
 	context,
-	entry: join(context, 'src/app/index.jsx'),
+	entry: join(context, 'src/app/index.tsx'),
 	output: {
 		filename: 'js/[name].[contenthash].js',
 		path: join(context, 'build'),
@@ -17,22 +18,32 @@ module.exports = {
 		publicPath: '/',
 	},
 	resolve: {
-		extensions: ['.js', '.jsx'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 	},
 	module: {
 		rules: [
 			{
-				test: /\.jsx?$/,
+				test: /\.[jt]sx?$/i,
 				exclude: /node_modules/,
-				loader: 'babel-loader',
-				options: {
-					cacheDirectory: true,
-					presets: ['@babel/env', '@babel/react'],
-					plugins: [['@babel/transform-runtime', { regenerator: true }]],
-				},
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							cacheDirectory: true,
+							presets: ['@babel/env', '@babel/react', '@babel/typescript'],
+							plugins: [['@babel/transform-runtime', { regenerator: true }]],
+						},
+					},
+					{
+						loader: 'ts-loader',
+						options: {
+							transpileOnly: true,
+						},
+					},
+				],
 			},
 			{
-				test: /\.css$/,
+				test: /\.css$/i,
 				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 		],
@@ -42,5 +53,6 @@ module.exports = {
 		new HtmlWebpackPlugin({ template: join(context, 'public/index.html') }),
 		new CopyWebpackPlugin({ patterns: [{ from: 'public/' }] }),
 		new CleanWebpackPlugin(),
+		new ForkTsCheckerPlugin({ async: false }),
 	],
 };

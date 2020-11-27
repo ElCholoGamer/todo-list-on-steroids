@@ -2,10 +2,15 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from 'react-bootstrap/Navbar';
+import { User } from '../utils';
 
-function Header({ user }) {
-	const handleClick = e => {
-		e.target.disabled = true; // Disable button
+interface Props {
+	user: User | null;
+}
+
+const Header: React.FC<Props> = ({ user }) => {
+	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.currentTarget.disabled = true; // Disable button
 		fetch('/user/logout', { method: 'POST' }) // Post to logout route
 			.then(() => location.reload()) // Reload page when done
 			.catch(console.error);
@@ -41,6 +46,6 @@ function Header({ user }) {
 			</Navbar.Collapse>
 		</Navbar>
 	);
-}
+};
 
 export default Header;

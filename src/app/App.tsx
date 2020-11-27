@@ -7,7 +7,7 @@ const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
 
-function App() {
+const App: React.FC = () => {
 	const [user, setUser] = React.useState(null);
 
 	React.useEffect(() => {
@@ -29,6 +29,6 @@ function App() {
 			</Switch>
 		</React.Suspense>
 	);
-}
+};
 
 export default App;
