@@ -2,7 +2,7 @@
 
 ![Build badge](https://github.com/ElCholoGamer/todo-list-on-steroids/workflows/Build/badge.svg)
 
-I swear I totally regret not using TypeScript lmfao
+I swear I totally regret not using TypeScript from the start lmfao
 
 Well I guess I should leave a usage guide or something
 
@@ -24,7 +24,7 @@ $ yarn install
 $ yarn build
 ```
 
-Add the mongoDB connection URI to a `.env` file:
+Add the MongoDB connection URI to a `.env` file:
 
 ```
 ATLAS_URI="some-mongodb-uri"
