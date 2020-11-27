@@ -6,11 +6,12 @@ const passport = require('passport');
 const { connection } = require('mongoose');
 const connectMongo = require('connect-mongo');
 const { resolve, join } = require('path');
+
 require('dotenv').config();
 
-const initPassport = require('./passport');
-const initDatabase = require('./database');
-const indexRouter = require('./routes');
+const initPassport = require('./util/passport');
+const initDatabase = require('./util/database');
+const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 
 // Initialization
@@ -24,6 +25,7 @@ app.set('json replacer', (key, val) => (key === 'password' ? undefined : val));
 // Middleware
 app.use(cors()); // Allow access from cross-origin requests
 app.use(express.urlencoded({ extended: false })); // Body parser for urlencoded requests
+app.use(express.json()); // Body parser for JSON requests
 app.use(morgan('common')); // Request logger
 
 // Express session (Needed for passport)
@@ -41,27 +43,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/user', userRouter);
 
 // Static files and React app
-if (!process.argv.includes('--dev')) {
-	const BUILD = resolve(__dirname, '../../build');
+const BUILD = resolve(__dirname, '../../build');
+app.use(express.static(BUILD));
 
-	app.use(express.static(BUILD));
-	app.get('*', (req, res, next) => {
-		const {
-			method,
-			headers: { accept = '' },
-		} = req;
+app.get('*', (req, res, next) => {
+	const {
+		method,
+		headers: { accept = '' },
+	} = req;
 
-		if (method === 'GET' && accept.indexOf('text/html') !== -1) {
-			res.sendFile(join(BUILD, 'index.html'));
-		} else {
-			next();
-		}
-	});
-}
+	if (method === 'GET' && accept.indexOf('text/html') !== -1) {
+		res.sendFile(join(BUILD, 'index.html'));
+	} else {
+		next();
+	}
+});
 
 // Database connection
 initDatabase()

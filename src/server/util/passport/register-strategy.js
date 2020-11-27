@@ -1,7 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const { hashSync } = require('bcrypt');
 
-const User = require('../models/user');
+const User = require('../../models/user');
 
 const registerStrategy = new LocalStrategy(
 	{
@@ -19,6 +19,7 @@ const registerStrategy = new LocalStrategy(
 		const user = new User({
 			username,
 			password,
+			todo: [],
 		});
 
 		user.encryptPassword(); // Hash password for storing in database

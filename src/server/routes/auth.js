@@ -1,14 +1,18 @@
 const express = require('express');
 const passport = require('passport');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
+
+router.use(checkAuth({ allowValue: false }));
 
 router.post('/register', passport.authenticate('local-register'), (req, res) =>
 	res.json({ status: 200, user: req.user })
 );
 
+// Login route
 router.post('/login', (req, res, next) => {
-	console.log('User logging in...');
+	req.logout();
 	passport.authenticate('local-login', (err, user, info) => {
 		if (err) {
 			next(err);
