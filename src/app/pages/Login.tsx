@@ -21,10 +21,7 @@ const Login: React.FC = () => {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			})
 			.then(() => (location.href = '/')) // Redirect to homepage after login
-			.catch(err => {
-				const { data = {} } = err.response || {};
-				setMessage(data.message || 'Unknown error');
-			});
+			.catch(err => setMessage(err.response?.data?.message || 'Unknown error'));
 	};
 
 	const { username, password } = data;

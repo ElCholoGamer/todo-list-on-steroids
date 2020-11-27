@@ -17,14 +17,16 @@ const TodoItem: React.FC<Props> = ({
 	deleteTodo,
 	id,
 }) => {
+	const [disabled, setDisabled] = React.useState(false);
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.target.disabled = true;
-		changeDone(id, e.target.checked).finally(() => (e.target.disabled = false));
+		setDisabled(true);
+		changeDone(id, e.target.checked).finally(() => setDisabled(false));
 	};
 
-	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		e.currentTarget.disabled = true;
-		deleteTodo(id).finally(() => (e.currentTarget.disabled = false));
+	const handleClick = () => {
+		setDisabled(true);
+		deleteTodo(id).finally(() => setDisabled(false));
 	};
 
 	return (
@@ -32,12 +34,14 @@ const TodoItem: React.FC<Props> = ({
 			<Button
 				variant="danger"
 				onClick={handleClick}
+				disabled={disabled}
 				className="rounded-circle py-0 px-2 mr-2">
 				&times;
 			</Button>
 			<Form.Check
 				checked={done}
 				inline
+				disabled={disabled}
 				className="mr-2"
 				onChange={handleChange}
 			/>

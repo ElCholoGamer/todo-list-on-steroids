@@ -1,7 +1,10 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import NavItem from 'react-bootstrap/NavItem';
+import NavLink from 'react-bootstrap/NavLink';
 import { User } from '../utils';
 
 interface Props {
@@ -20,7 +23,12 @@ const Header: React.FC<Props> = ({ user }) => {
 		<Navbar bg="dark" variant="dark" expand="sm">
 			<Navbar.Brand href="/">Todo List</Navbar.Brand>
 			<Navbar.Toggle />
-			<Navbar.Collapse className="justify-content-end">
+			<Navbar.Collapse className="justify-content-between">
+				<Nav>
+					<NavItem>
+						<NavLink href="/todo">My Todo List</NavLink>
+					</NavItem>
+				</Nav>
 				<Navbar.Text>
 					{!user ? (
 						<ButtonGroup>

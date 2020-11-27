@@ -22,6 +22,7 @@ router.post('/login', (req, res, next) => {
 			// Log in user to session
 			req.login(user, err => {
 				if (err) {
+					console.error(err);
 					res.status(500).json({ status: 500, message: 'Unknown error' });
 				} else {
 					res.json({ status: 200, user }); // Send response with user
