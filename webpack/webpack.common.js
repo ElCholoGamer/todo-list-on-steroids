@@ -46,6 +46,14 @@ module.exports = {
 				test: /\.css$/i,
 				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
+			{
+				test: /\.gif$/i,
+				loader: 'file-loader',
+				options: {
+					name: '[name].[ext]',
+					outputPath: 'assets',
+				},
+			},
 		],
 	},
 	plugins: [

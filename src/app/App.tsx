@@ -11,13 +11,20 @@ const Register = React.lazy(() => import('./pages/Register'));
 
 const App: React.FC = () => {
 	const [user, setUser] = React.useState<User | null>(null);
+	const [loaded, setLoaded] = React.useState(false);
 
+	// Get user info from server
 	React.useEffect(() => {
 		axios
-			.get('/user') // Get user info
+			.get('/user')
 			.then(res => setUser(res.data.user)) // Set user info to state
-			.catch(() => null); // Ignore errors
+			.catch(() => null)
+			.finally(() => setLoaded(true)); // Ignore errors
 	}, []);
+
+	if (!loaded) {
+		return <h1>Loading...</h1>;
+	}
 
 	return (
 		<React.Suspense fallback={<h1>Loading...</h1>}>

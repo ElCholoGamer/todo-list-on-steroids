@@ -14,6 +14,7 @@ interface Props {
 const Header: React.FC<Props> = ({ user }) => {
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.currentTarget.disabled = true; // Disable button
+
 		fetch('/user/logout', { method: 'POST' }) // Post to logout route
 			.then(() => location.reload()) // Reload page when done
 			.catch(console.error);
@@ -25,9 +26,11 @@ const Header: React.FC<Props> = ({ user }) => {
 			<Navbar.Toggle />
 			<Navbar.Collapse className="justify-content-between">
 				<Nav>
-					<NavItem>
-						<NavLink href="/todo">My Todo List</NavLink>
-					</NavItem>
+					{user && (
+						<NavItem>
+							<NavLink href="/todo">My Todo List</NavLink>
+						</NavItem>
+					)}
 				</Nav>
 				<Navbar.Text>
 					{!user ? (

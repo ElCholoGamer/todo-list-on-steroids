@@ -56,7 +56,7 @@ const TodoPage: React.FC<Props> = ({ user }) => {
 
 	return (
 		<div className="p-3">
-			<h1 className="text-center">Todo List</h1>
+			<h1 className="text-center">Your Todo List</h1>
 			<hr />
 
 			<div>
