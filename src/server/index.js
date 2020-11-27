@@ -3,7 +3,10 @@ const cors = require('cors');
 const morgan = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
+const { connection } = require('mongoose');
+const connectMongo = require('connect-mongo');
 const { resolve, join } = require('path');
+require('dotenv').config();
 
 const initPassport = require('./passport');
 const initDatabase = require('./database');
@@ -12,6 +15,7 @@ const userRouter = require('./routes/user');
 
 // Initialization
 const app = express();
+const MongoStore = connectMongo(session);
 initPassport();
 
 // JSON replacer for password
@@ -25,9 +29,10 @@ app.use(morgan('common')); // Request logger
 // Express session (Needed for passport)
 app.use(
 	session({
-		secret: 'big-chungus',
+		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
+		store: new MongoStore({ mongooseConnection: connection }),
 	})
 );
 
@@ -63,7 +68,7 @@ initDatabase()
 	.then(() => {
 		console.log('Database connected');
 
-		const { PORT = 8080 } = process.env;
+		const { PORT = 5000 } = process.env;
 		app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
 	})
 	.catch(console.error);

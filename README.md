@@ -28,6 +28,7 @@ Add the mongoDB connection URI to a `.env` file:
 
 ```
 ATLAS_URI="some-mongodb-uri"
+SESSION_SECRET="something-idk"
 ```
 
 Finally, serve build files and stuff:
