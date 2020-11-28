@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import common from './webpack.common';
 
-module.exports = merge(common, {
+const config = merge(common, {
 	mode: 'production',
 	optimization: {
 		splitChunks: {
@@ -11,3 +11,5 @@ module.exports = merge(common, {
 	},
 	plugins: [new webpack.optimize.SplitChunksPlugin()],
 });
+
+export default config;
