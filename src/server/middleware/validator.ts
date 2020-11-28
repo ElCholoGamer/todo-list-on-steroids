@@ -3,13 +3,15 @@ import { RequestHandler } from 'express';
 type PropType = 'string' | 'number' | 'boolean' | 'null' | 'object' | 'array';
 
 interface Fields {
-	[prop: string]: {
-		type: PropType;
-		required?: boolean;
-		minLength?: number;
-		maxLength?: number;
-		regex?: RegExp;
-	};
+	[prop: string]:
+		| {
+				type: PropType;
+				required?: boolean;
+				minLength?: number;
+				maxLength?: number;
+				regex?: RegExp;
+		  }
+		| PropType;
 }
 
 interface Options {
@@ -34,9 +36,10 @@ function validator(fields: Fields, options: Options = {}): RequestHandler {
 	return (req, res, next) => {
 		for (const field in fields) {
 			// Get field options
-			const { type, required = true, minLength = 0, maxLength, regex } = fields[
-				field
-			];
+			let opts = fields[field];
+			if (typeof opts === 'string') opts = { type: opts };
+
+			const { type, required = true, minLength = 0, maxLength, regex } = opts;
 
 			// Response message formatter
 			const formatMessage = (received: string) =>
