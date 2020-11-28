@@ -1,4 +1,5 @@
 import express from 'express';
+import validator from '../middleware/validator';
 
 const router = express.Router();
 
@@ -11,26 +12,25 @@ router.get('/', async (req, res) => {
 	});
 });
 
-router.post('/', async (req, res) => {
-	const { content, done = false } = req.body;
+router.post(
+	'/',
+	validator({
+		content: { type: 'string', minLength: 1 },
+		done: { type: 'boolean', required: false },
+	}),
+	async (req, res) => {
+		const { content, done = false } = req.body;
 
-	const type = typeof content;
-	if (type !== 'string') {
-		return res.status(400).json({
-			status: 400,
-			message: `Property "content" in request body must be of type "string", received "${type}"`,
+		const todoList = await req.user!.getTodoList();
+		todoList.items.push({ content, done });
+		await todoList.save();
+
+		res.status(204).json({
+			status: 204,
+			items: todoList.items,
 		});
 	}
-
-	const todoList = await req.user!.getTodoList();
-	todoList.items.push({ content, done });
-	await todoList.save();
-
-	res.status(204).json({
-		status: 204,
-		items: todoList.items,
-	});
-});
+);
 
 router.get('/:id', async (req, res) => {
 	const { id } = req.params;
@@ -51,30 +51,37 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
-router.put('/:id', async (req, res) => {
-	const { id } = req.params;
-	const todoList = await req.user!.getTodoList();
+router.put(
+	'/:id',
+	validator({
+		content: { type: 'string', required: false },
+		done: { type: 'boolean', required: false },
+	}),
+	async (req, res) => {
+		const { id } = req.params;
+		const todoList = await req.user!.getTodoList();
 
-	// Get list item
-	const item = todoList.getItem(id);
-	if (!item) {
-		return res.status(404).json({
+		// Get list item
+		const item = todoList.getItem(id);
+		if (!item) {
+			return res.status(404).json({
+				status: 200,
+				message: `Todo item by ID "${id}" not found`,
+			});
+		}
+
+		// Update item data
+		const { content = item.content, done = item.done } = req.body;
+		item.content = content;
+		item.done = done;
+
+		await todoList.save(); // Save Todo List
+		res.json({
 			status: 200,
-			message: `Todo item by ID "${id}" not found`,
+			items: todoList.items,
 		});
 	}
-
-	// Update item data
-	const { content = item.content, done = item.done } = req.body;
-	item.content = content;
-	item.done = done;
-
-	await todoList.save(); // Save Todo List
-	res.json({
-		status: 200,
-		items: todoList.items,
-	});
-});
+);
 
 router.delete('/:id', async (req, res) => {
 	const { id } = req.params;
