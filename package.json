@@ -2,7 +2,7 @@
 	"name": "todo-list-on-steroids",
 	"version": "1.0.0",
 	"repository": "https://github.com/ElCholoGamer/todo-list-on-steroids.git",
-	"homepage": "https://github.com/ElCholoGamer/todo-list-on-steroids/blob/main/README.md",
+	"homepage": "https://github.com/ElCholoGamer/todo-list-on-steroids#README.md",
 	"author": "ElCholoGamer <josedanielgrayson@gmail.com>",
 	"license": "MIT",
 	"private": true,
