@@ -25,8 +25,8 @@ router.post(
 		todoList.items.push({ content, done });
 		await todoList.save();
 
-		res.status(204).json({
-			status: 204,
+		res.json({
+			status: 200,
 			items: todoList.items,
 		});
 	}
@@ -92,7 +92,7 @@ router.delete('/:id', async (req, res) => {
 	const item = todoList.getItem(id);
 	if (!item) {
 		return res.status(404).json({
-			status: 200,
+			status: 404,
 			message: `Todo item by ID "${id}" not found`,
 		});
 	}
@@ -101,8 +101,8 @@ router.delete('/:id', async (req, res) => {
 	todoList.items = todoList.items.filter(item => item._id!.toString() !== id);
 	await todoList.save();
 
-	res.status(204).json({
-		status: 204,
+	res.json({
+		status: 200,
 		items: todoList.items,
 	});
 });

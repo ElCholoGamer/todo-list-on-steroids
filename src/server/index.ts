@@ -26,7 +26,6 @@ app.set('json replacer', (key: string, val: any) =>
 
 // Middleware
 app.use(cors()); // Allow access from cross-origin requests
-app.use(express.urlencoded({ extended: false })); // Body parser for urlencoded requests
 app.use(express.json()); // Body parser for JSON requests
 app.use(morgan('common')); // Request logger
 
