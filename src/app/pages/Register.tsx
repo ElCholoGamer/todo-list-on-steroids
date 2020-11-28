@@ -2,7 +2,6 @@ import axios from 'axios';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { stringify } from '../utils';
 
 const Register: React.FC = () => {
 	const [data, setData] = React.useState({ username: '', password: '' });
@@ -17,9 +16,7 @@ const Register: React.FC = () => {
 
 		// Post data to login route
 		axios
-			.post('/auth/register', stringify(data), {
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			})
+			.post('/auth/register', data)
 			.then(() => (location.href = '/')) // Redirect to homepage after login
 			.catch(err => {
 				if (err.response?.status === 401) {
