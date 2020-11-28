@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"allowJs": true,
+		"jsx": "react",
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"noImplicitAny": true,
+		"resolveJsonModule": true,
+		"typeRoots": ["src"]
+	}
+}

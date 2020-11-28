@@ -4,6 +4,3 @@
 
 .env*
 yarn-error.log*
-
-# This is just for VSCode stuff
-/tsconfig.json
