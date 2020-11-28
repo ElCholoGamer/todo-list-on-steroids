@@ -17,10 +17,8 @@ router.post('/login', (req, res, next) => {
 		if (err) {
 			next(err);
 		} else if (info && !user) {
-			const [status, message] = info.message?.split('-') || [
-				500,
-				'Unkown error',
-			];
+			const [message = 'Unknown error', status = 401] =
+				info.message?.split('-') || [];
 			res.status(status).json({ status, message });
 		} else {
 			// Log in user to session

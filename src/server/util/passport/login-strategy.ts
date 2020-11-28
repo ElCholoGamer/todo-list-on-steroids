@@ -9,11 +9,11 @@ const loginStrategy = new LocalStrategy(
 	async (username, password, done) => {
 		// Check if user exists
 		const user = await User.findOne({ username });
-		if (!user) return done(null, false, { message: '404-User not found' });
+		if (!user) return done(null, false, { message: 'User not found-404' });
 
 		// Check if password is correct
 		if (!user.comparePassword(password))
-			return done(null, false, { message: '401-Incorrect password' });
+			return done(null, false, { message: 'Incorrect password-401' });
 
 		done(null, user); // Return authenticated user
 	}

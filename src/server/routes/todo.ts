@@ -26,8 +26,8 @@ router.post('/', async (req, res) => {
 	todoList.items.push({ content, done });
 	await todoList.save();
 
-	res.json({
-		status: 200,
+	res.status(204).json({
+		status: 204,
 		items: todoList.items,
 	});
 });
@@ -94,8 +94,8 @@ router.delete('/:id', async (req, res) => {
 	todoList.items = todoList.items.filter(item => item._id!.toString() !== id);
 	await todoList.save();
 
-	res.json({
-		status: 200,
+	res.status(204).json({
+		status: 204,
 		items: todoList.items,
 	});
 });
