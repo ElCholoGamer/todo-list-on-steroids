@@ -1,10 +1,10 @@
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const { resolve } = require('path');
+import { resolve } from 'path';
+import webpack from 'webpack';
+import 'webpack-dev-server';
+import { merge } from 'webpack-merge';
+import common from './webpack.common';
 
-const common = require('./webpack.common');
-
-module.exports = merge(common, {
+const config = merge(common, {
 	mode: 'development',
 	devtool: 'inline-source-map',
 	devServer: {
@@ -16,13 +16,15 @@ module.exports = merge(common, {
 		proxy: {
 			'/': {
 				target: 'http://localhost:5000',
-				bypass: req =>
+				bypass: (req: any) =>
 					req.method === 'GET' &&
 					req.headers.accept?.indexOf('text/html') !== -1
 						? '/index.html' // Skip proxy
 						: null, // Continue with proxy
-			},
+			} as any,
 		},
 	},
 	plugins: [new webpack.HotModuleReplacementPlugin()],
 });
+
+export default config;

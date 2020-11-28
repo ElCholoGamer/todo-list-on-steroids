@@ -49,21 +49,23 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 
 // Static files and React app
-const BUILD = resolve(__dirname, '../build');
-app.use(express.static(BUILD));
+if (!process.argv.includes('--dev')) {
+	const BUILD = resolve(__dirname, '../build');
+	app.use(express.static(BUILD));
 
-app.get('*', (req, res, next) => {
-	const {
-		method,
-		headers: { accept = '' },
-	} = req;
+	app.get('*', (req, res, next) => {
+		const {
+			method,
+			headers: { accept = '' },
+		} = req;
 
-	if (method === 'GET' && accept.indexOf('text/html') !== -1) {
-		res.sendFile(join(BUILD, 'index.html'));
-	} else {
-		next();
-	}
-});
+		if (method === 'GET' && accept.indexOf('text/html') !== -1) {
+			res.sendFile(join(BUILD, 'index.html'));
+		} else {
+			next();
+		}
+	});
+}
 
 // Database connection
 initDatabase()

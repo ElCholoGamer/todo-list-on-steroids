@@ -1,14 +1,14 @@
-const { resolve, join } = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { join, resolve } from 'path';
+import webpack from 'webpack';
 
 const context = resolve(__dirname, '../');
 
-/** @type {import('webpack').Configuration} */
-module.exports = {
+const config: webpack.Configuration = {
 	context,
 	entry: join(context, 'src/app/index.tsx'),
 	devtool: 'eval-source-map',
@@ -39,7 +39,10 @@ module.exports = {
 						loader: 'ts-loader',
 						options: {
 							transpileOnly: true,
-							configFile: join(context, './tsconfig/tsconfig.webpack.json'),
+							configFile: resolve(
+								__dirname,
+								'../tsconfig/tsconfig.webpack.json'
+							),
 						},
 					},
 				],
@@ -66,3 +69,5 @@ module.exports = {
 		new ForkTsCheckerPlugin({ async: false }),
 	],
 };
+
+export default config;
