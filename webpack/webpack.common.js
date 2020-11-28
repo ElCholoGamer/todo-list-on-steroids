@@ -5,9 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 
-const context = resolve(__dirname, '..');
-console.log('Context:', context);
-console.log('Joined:', join(context, 'tsconfig/tsconfig.webpack.json'));
+const context = resolve(__dirname, '../');
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -41,7 +39,7 @@ module.exports = {
 						loader: 'ts-loader',
 						options: {
 							transpileOnly: true,
-							configFile: join(context, 'tsconfig/tsconfig.webpack.json'),
+							configFile: join(context, './tsconfig/tsconfig.webpack.json'),
 						},
 					},
 				],
