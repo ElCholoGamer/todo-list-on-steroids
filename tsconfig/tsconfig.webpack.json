@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES5",
-		"module": "CommonJS",
+		"module": "ESNext",
 		"allowJs": true,
 		"removeComments": true,
 		"jsx": "react",
@@ -12,7 +12,8 @@
 		"resolveJsonModule": true,
 		"strictNullChecks": true,
 		"sourceMap": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"moduleResolution": "node"
 	},
 	"include": ["../src/app/**/*"]
 }
