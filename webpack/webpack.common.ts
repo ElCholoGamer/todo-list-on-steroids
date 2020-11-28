@@ -52,7 +52,7 @@ const config: webpack.Configuration = {
 				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 			{
-				test: /\.gif$/i,
+				test: /\.(gif|png|jpe?g|svg|ico|mp4)$/i,
 				loader: 'file-loader',
 				options: {
 					name: '[name].[ext]',
