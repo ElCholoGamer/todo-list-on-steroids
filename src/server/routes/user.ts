@@ -1,7 +1,6 @@
-const express = require('express');
-
-const checkAuth = require('../middleware/check-auth');
-const todoRouter = require('./todo');
+import express from 'express';
+import checkAuth from '../middleware/check-auth';
+import todoRouter from './todo';
 
 const router = express.Router();
 
@@ -20,4 +19,4 @@ router.post('/logout', (req, res) => {
 	});
 });
 
-module.exports = router;
+export default router;

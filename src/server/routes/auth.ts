@@ -1,6 +1,6 @@
-const express = require('express');
-const passport = require('passport');
-const checkAuth = require('../middleware/check-auth');
+import express from 'express';
+import passport from 'passport';
+import checkAuth from '../middleware/check-auth';
 
 const router = express.Router();
 
@@ -17,7 +17,11 @@ router.post('/login', (req, res, next) => {
 		if (err) {
 			next(err);
 		} else if (info && !user) {
-			res.status(info.status || 401).json(info);
+			const [status, message] = info.message?.split('-') || [
+				500,
+				'Unkown error',
+			];
+			res.status(status).json({ status, message });
 		} else {
 			// Log in user to session
 			req.login(user, err => {
@@ -32,4 +36,4 @@ router.post('/login', (req, res, next) => {
 	})(req, res, next);
 });
 
-module.exports = router;
+export default router;

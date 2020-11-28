@@ -1,6 +1,14 @@
-const { Schema, model } = require('mongoose');
-const { compareSync, hashSync } = require('bcrypt');
-const TodoList = require('./todo-list');
+import { compareSync, hashSync } from 'bcrypt';
+import { Document, model, Schema } from 'mongoose';
+import TodoList, { ITodoList } from './todo-list';
+
+export interface IUser extends Document {
+	username: string;
+	password: string;
+	getTodoList(): Promise<ITodoList>;
+	encryptPassword(): void;
+	comparePassword(password: string): boolean;
+}
 
 const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
@@ -20,6 +28,6 @@ UserSchema.methods.comparePassword = function (password = '') {
 	return compareSync(password, this.password);
 };
 
-const User = model('User', UserSchema);
+const User = model<IUser>('User', UserSchema);
 
-module.exports = User;
+export default User;

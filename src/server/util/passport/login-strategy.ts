@@ -1,6 +1,5 @@
-const User = require('../../models/user');
-
-const LocalStrategy = require('passport-local').Strategy;
+import { Strategy as LocalStrategy } from 'passport-local';
+import User from '../../models/user';
 
 const loginStrategy = new LocalStrategy(
 	{
@@ -10,15 +9,14 @@ const loginStrategy = new LocalStrategy(
 	async (username, password, done) => {
 		// Check if user exists
 		const user = await User.findOne({ username });
-		if (!user)
-			return done(null, false, { status: 404, message: 'User not found' });
+		if (!user) return done(null, false, { message: '404-User not found' });
 
 		// Check if password is correct
 		if (!user.comparePassword(password))
-			return done(null, false, { status: 401, message: 'Incorrect password' });
+			return done(null, false, { message: '401-Incorrect password' });
 
 		done(null, user); // Return authenticated user
 	}
 );
 
-module.exports = loginStrategy;
+export default loginStrategy;

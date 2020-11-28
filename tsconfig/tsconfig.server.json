@@ -2,15 +2,15 @@
 	"compilerOptions": {
 		"target": "ES5",
 		"module": "CommonJS",
+		"outDir": "../dist",
 		"allowJs": true,
 		"removeComments": true,
-		"jsx": "react",
 		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"noImplicitAny": false,
-		"strict": true,
 		"resolveJsonModule": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"skipLibCheck": true,
 		"strictNullChecks": true
 	},
-	"include": ["./src/app/**/*"]
+	"include": ["../src/server/**/*"]
 }

@@ -1,7 +1,5 @@
-const LocalStrategy = require('passport-local').Strategy;
-const { hashSync } = require('bcrypt');
-
-const User = require('../../models/user');
+import { Strategy as LocalStrategy } from 'passport-local';
+import User from '../../models/user';
 
 const registerStrategy = new LocalStrategy(
 	{
@@ -29,4 +27,4 @@ const registerStrategy = new LocalStrategy(
 	}
 );
 
-module.exports = registerStrategy;
+export default registerStrategy;

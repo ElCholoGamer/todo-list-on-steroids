@@ -11,6 +11,7 @@ const context = resolve(__dirname, '..');
 module.exports = {
 	context,
 	entry: join(context, 'src/app/index.tsx'),
+	devtool: 'eval-source-map',
 	output: {
 		filename: 'js/[name].[contenthash].js',
 		path: join(context, 'build'),
@@ -38,6 +39,7 @@ module.exports = {
 						loader: 'ts-loader',
 						options: {
 							transpileOnly: true,
+							configFile: resolve(context, 'tsconfig/tsconfig.webpack.json'),
 						},
 					},
 				],
