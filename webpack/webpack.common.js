@@ -6,6 +6,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 
 const context = resolve(__dirname, '..');
+console.log('Context:', context);
+console.log('Joined:', join(context, 'tsconfig/tsconfig.webpack.json'));
 
 /** @type {import('webpack').Configuration} */
 module.exports = {

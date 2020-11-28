@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
+import Loading from './components/Loading';
 import TodoPage from './pages/TodoPage';
 import { User } from './utils';
 
@@ -22,12 +23,10 @@ const App: React.FC = () => {
 			.finally(() => setLoaded(true)); // Ignore errors
 	}, []);
 
-	if (!loaded) {
-		return <h1>Loading...</h1>;
-	}
+	if (!loaded) return <Loading />;
 
 	return (
-		<React.Suspense fallback={<h1>Loading...</h1>}>
+		<React.Suspense fallback={<Loading />}>
 			<Header user={user} />
 			<Switch>
 				<Route exact path="/" component={Home} />
