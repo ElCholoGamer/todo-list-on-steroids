@@ -5,6 +5,7 @@ import TodoList, { ITodoList } from './todo-list';
 export interface IUser extends Document {
 	username: string;
 	password: string;
+	bio?: string;
 	getTodoList(): Promise<ITodoList>;
 	encryptPassword(): void;
 	comparePassword(password: string): boolean;
@@ -13,6 +14,7 @@ export interface IUser extends Document {
 const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
+	bio: { type: String, required: true, default: '', trim: true },
 });
 
 UserSchema.methods.getTodoList = async function () {
