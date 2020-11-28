@@ -3,12 +3,13 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Loading from './components/Loading';
-import TodoPage from './pages/TodoPage';
 import { User } from './utils';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
+const Account = React.lazy(() => import('./pages/Account'));
+const TodoPage = React.lazy(() => import('./pages/TodoPage'));
 
 const App: React.FC = () => {
 	const [user, setUser] = React.useState<User | null>(null);
@@ -33,6 +34,7 @@ const App: React.FC = () => {
 				<Route exact path="/todo" children={<TodoPage user={user} />} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
+				<Route exact path="/account" children={<Account user={user} />} />
 
 				<Redirect to="/" />
 			</Switch>
