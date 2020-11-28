@@ -8,7 +8,7 @@ const Register: React.FC = () => {
 	const [message, setMessage] = React.useState('');
 
 	const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
-		setData({ ...data, [target.name]: target.value });
+		setData(prev => ({ ...prev, [target.name]: target.value }));
 
 	const handleClick = () => {
 		// Check that all values aren't empty
