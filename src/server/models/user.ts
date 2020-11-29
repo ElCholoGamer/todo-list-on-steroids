@@ -1,22 +1,24 @@
 import { compareSync, hashSync } from 'bcrypt';
 import { Document, model, Schema } from 'mongoose';
-import Picture, { IPicture } from './picture';
+import Avatar, { IAvatar } from './avatar';
 import TodoList, { ITodoList } from './todo-list';
 
 export interface IUser extends Document {
 	username: string;
 	password: string;
 	bio?: string;
+	avatar: boolean;
 	getTodoList(): Promise<ITodoList>;
 	encryptPassword(): void;
 	comparePassword(password: string): boolean;
-	getPicture(): Promise<IPicture> | undefined;
+	getAvatar(): Promise<IAvatar> | undefined;
 }
 
 const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
 	bio: { type: String, trim: true },
+	avatar: { type: String, required: true, default: false },
 });
 
 UserSchema.methods.getTodoList = async function () {
@@ -32,8 +34,8 @@ UserSchema.methods.comparePassword = function (password = '') {
 	return compareSync(password, this.password);
 };
 
-UserSchema.methods.getPicture = async function () {
-	return await Picture.findById(this._id);
+UserSchema.methods.getAvatar = async function () {
+	return await Avatar.findById(this._id);
 };
 
 const User = model<IUser>('User', UserSchema);

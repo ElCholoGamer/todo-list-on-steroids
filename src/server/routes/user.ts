@@ -3,7 +3,7 @@ import multer from 'multer';
 import asyncHandler from '../middleware/async-handler';
 import checkAuth from '../middleware/check-auth';
 import validator from '../middleware/validator';
-import Picture from '../models/picture';
+import Avatar from '../models/avatar';
 import User from '../models/user';
 import todoRouter from './todo';
 
@@ -44,10 +44,10 @@ router.put(
 	})
 );
 
-// Upload profile picture
+// Upload user avatar
 const upload = multer();
 router.put(
-	'/picture',
+	'/avatar',
 	upload.single('image'),
 	asyncHandler(async (req, res) => {
 		const { file } = req;
@@ -69,14 +69,20 @@ router.put(
 			});
 		}
 
-		// Get current picture
+		// Get current avatar
 		const picture =
-			(await req.user!.getPicture()) || new Picture({ _id: req.user!._id });
+			(await req.user!.getAvatar()) || new Avatar({ _id: req.user!._id });
 
 		// Assign new values and save
 		picture.data = buffer;
 		picture.contentType = mimetype;
 		await picture.save();
+
+		// Enable avatar in user
+		if (!req.user!.avatar) {
+			req.user!.avatar = true;
+			await req.user!.save();
+		}
 
 		res.json({
 			status: 200,
@@ -87,9 +93,9 @@ router.put(
 
 // Get profile picture
 router.get(
-	'/picture',
+	'/avatar',
 	asyncHandler(async (req, res) => {
-		const picture = await req.user!.getPicture();
+		const picture = await req.user!.getAvatar();
 		res.json({
 			status: 200,
 			picture,

@@ -1,15 +1,15 @@
 import { Document, model, Schema } from 'mongoose';
 
-export interface IPicture extends Document {
+export interface IAvatar extends Document {
 	data: Buffer;
 	contentType: string;
 }
 
-const PictureSchema = new Schema({
+const AvatarSchema = new Schema({
 	data: { type: Buffer, required: true },
 	contentType: { type: String, required: true, trim: true },
 });
 
-const Picture = model<IPicture>('Picture', PictureSchema);
+const Avatar = model<IAvatar>('Avatar', AvatarSchema);
 
-export default Picture;
+export default Avatar;

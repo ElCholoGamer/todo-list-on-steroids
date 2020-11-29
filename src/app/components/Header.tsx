@@ -17,8 +17,11 @@ const Header: React.FC<Props> = ({ user }) => {
 	const [picture, setPicture] = React.useState(DefaultPicture);
 
 	React.useEffect(() => {
+		if (!user?.avatar) return;
+
+		// Get and set user avatar
 		axios
-			.get('/user/picture')
+			.get('/user/avatar')
 			.then(res => {
 				const bytes = new Uint8Array(res.data.picture.data.data);
 				const reader = new FileReader();
@@ -27,7 +30,7 @@ const Header: React.FC<Props> = ({ user }) => {
 				reader.readAsDataURL(new Blob([bytes.buffer]));
 			})
 			.catch(console.error);
-	}, []);
+	}, [user]);
 
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.currentTarget.disabled = true; // Disable button
