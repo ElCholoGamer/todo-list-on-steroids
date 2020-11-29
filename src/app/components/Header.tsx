@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -13,6 +14,21 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ user }) => {
+	const [picture, setPicture] = React.useState(DefaultPicture);
+
+	React.useEffect(() => {
+		axios
+			.get('/user/picture')
+			.then(res => {
+				const bytes = new Uint8Array(res.data.picture.data.data);
+				const reader = new FileReader();
+
+				reader.onload = e => setPicture(e.target?.result);
+				reader.readAsDataURL(new Blob([bytes.buffer]));
+			})
+			.catch(console.error);
+	}, []);
+
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.currentTarget.disabled = true; // Disable button
 
@@ -49,8 +65,8 @@ const Header: React.FC<Props> = ({ user }) => {
 							<a href="/account" className="text-light font-weight-bold">
 								{user.username}
 								<img
-									src={DefaultPicture}
-									className="mx-2"
+									src={picture}
+									className="mx-2 rounded-circle"
 									width={40}
 									height={40}
 								/>
