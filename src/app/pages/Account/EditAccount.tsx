@@ -78,7 +78,7 @@ const EditAccount: React.FC<Props> = ({ user }) => {
 				</Form.Group>
 
 				<Button
-					disabled={username === user.username}
+					disabled={username === user.username && bio === user.bio}
 					variant="primary"
 					onClick={handleClick}>
 					Save Changes
