@@ -1,16 +1,20 @@
 import express from 'express';
+import asyncHandler from '../middleware/async-handler';
 import validator from '../middleware/validator';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-	const { items } = await req.user!.getTodoList();
+router.get(
+	'/',
+	asyncHandler(async (req, res) => {
+		const { items } = await req.user!.getTodoList();
 
-	res.json({
-		status: 200,
-		items,
-	});
-});
+		res.json({
+			status: 200,
+			items,
+		});
+	})
+);
 
 router.post(
 	'/',
@@ -18,7 +22,7 @@ router.post(
 		content: { type: 'string', minLength: 1 },
 		done: { type: 'boolean', required: false },
 	}),
-	async (req, res) => {
+	asyncHandler(async (req, res) => {
 		const { content, done = false } = req.body;
 
 		const todoList = await req.user!.getTodoList();
@@ -29,27 +33,30 @@ router.post(
 			status: 200,
 			items: todoList.items,
 		});
-	}
+	})
 );
 
-router.get('/:id', async (req, res) => {
-	const { id } = req.params;
+router.get(
+	'/:id',
+	asyncHandler(async (req, res) => {
+		const { id } = req.params;
 
-	const todoList = await req.user!.getTodoList(); // Get user's Todo List
-	const item = todoList.getItem(id); // Get item from list
+		const todoList = await req.user!.getTodoList(); // Get user's Todo List
+		const item = todoList.getItem(id); // Get item from list
 
-	if (!item) {
-		res.status(404).json({
-			status: 404,
-			message: `Item by ID "${id}" not found`,
-		});
-	} else {
-		res.json({
-			status: 200,
-			item,
-		});
-	}
-});
+		if (!item) {
+			res.status(404).json({
+				status: 404,
+				message: `Item by ID "${id}" not found`,
+			});
+		} else {
+			res.json({
+				status: 200,
+				item,
+			});
+		}
+	})
+);
 
 router.put(
 	'/:id',
@@ -57,7 +64,7 @@ router.put(
 		content: { type: 'string', required: false },
 		done: { type: 'boolean', required: false },
 	}),
-	async (req, res) => {
+	asyncHandler(async (req, res) => {
 		const { id } = req.params;
 		const todoList = await req.user!.getTodoList();
 
@@ -80,31 +87,34 @@ router.put(
 			status: 200,
 			items: todoList.items,
 		});
-	}
+	})
 );
 
-router.delete('/:id', async (req, res) => {
-	const { id } = req.params;
+router.delete(
+	'/:id',
+	asyncHandler(async (req, res) => {
+		const { id } = req.params;
 
-	const todoList = await req.user!.getTodoList();
+		const todoList = await req.user!.getTodoList();
 
-	// Check if item exists
-	const item = todoList.getItem(id);
-	if (!item) {
-		return res.status(404).json({
-			status: 404,
-			message: `Todo item by ID "${id}" not found`,
+		// Check if item exists
+		const item = todoList.getItem(id);
+		if (!item) {
+			return res.status(404).json({
+				status: 404,
+				message: `Todo item by ID "${id}" not found`,
+			});
+		}
+
+		// Remove item and save
+		todoList.items = todoList.items.filter(item => item._id!.toString() !== id);
+		await todoList.save();
+
+		res.json({
+			status: 200,
+			items: todoList.items,
 		});
-	}
-
-	// Remove item and save
-	todoList.items = todoList.items.filter(item => item._id!.toString() !== id);
-	await todoList.save();
-
-	res.json({
-		status: 200,
-		items: todoList.items,
-	});
-});
+	})
+);
 
 export default router;

@@ -1,5 +1,6 @@
 import express from 'express';
 import multer from 'multer';
+import asyncHandler from '../middleware/async-handler';
 import checkAuth from '../middleware/check-auth';
 import validator from '../middleware/validator';
 import Picture from '../models/picture';
@@ -21,7 +22,7 @@ router.put(
 		username: { type: 'string', minLength: 1 },
 		bio: { type: 'string', required: false },
 	}),
-	async (req, res) => {
+	asyncHandler(async (req, res) => {
 		const { username, bio = '' } = req.body;
 
 		const existing = await User.findOne({ username });
@@ -40,54 +41,61 @@ router.put(
 			status: 200,
 			user: req.user,
 		});
-	}
+	})
 );
 
 // Upload profile picture
 const upload = multer();
-router.put('/picture', upload.single('image'), async (req, res) => {
-	const { file } = req;
+router.put(
+	'/picture',
+	upload.single('image'),
+	asyncHandler(async (req, res) => {
+		const { file } = req;
 
-	// Check that file exists
-	if (!file) {
-		return res.status(400).json({
-			status: 400,
-			message: 'Missing property "image" in request body',
+		// Check that file exists
+		if (!file) {
+			return res.status(400).json({
+				status: 400,
+				message: 'Missing property "image" in request body',
+			});
+		}
+
+		// Check file mimetype
+		const { buffer, mimetype } = file;
+		if (!mimetype.startsWith('image')) {
+			return res.status(400).json({
+				status: 400,
+				message: 'Property "image" must have a mimetype starting with "image"',
+			});
+		}
+
+		// Get current picture
+		const picture =
+			(await req.user!.getPicture()) || new Picture({ _id: req.user!._id });
+
+		// Assign new values and save
+		picture.data = buffer;
+		picture.contentType = mimetype;
+		await picture.save();
+
+		res.json({
+			status: 200,
+			picture,
 		});
-	}
-
-	// Check file mimetype
-	const { buffer, mimetype } = file;
-	if (!mimetype.startsWith('image')) {
-		return res.status(400).json({
-			status: 400,
-			message: 'Property "image" must have a mimetype starting with "image"',
-		});
-	}
-
-	// Get current picture
-	const picture =
-		(await req.user!.getPicture()) || new Picture({ _id: req.user!._id });
-
-	// Assign new values and save
-	picture.data = buffer;
-	picture.contentType = mimetype;
-	await picture.save();
-
-	res.json({
-		status: 200,
-		picture,
-	});
-});
+	})
+);
 
 // Get profile picture
-router.get('/picture', async (req, res) => {
-	const picture = await req.user!.getPicture();
-	res.json({
-		status: 200,
-		picture,
-	});
-});
+router.get(
+	'/picture',
+	asyncHandler(async (req, res) => {
+		const picture = await req.user!.getPicture();
+		res.json({
+			status: 200,
+			picture,
+		});
+	})
+);
 
 // Log out user session
 router.post('/logout', (req, res) => {
