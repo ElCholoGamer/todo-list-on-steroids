@@ -21,6 +21,8 @@ interface Options {
 	minLengthMessage?: string;
 	maxLengthMessage?: string;
 	regexMessage?: string;
+	allowOther?: boolean;
+	otherPropertyMessage?: string;
 }
 
 function validator(fields: Fields, options: Options = {}): RequestHandler {
@@ -31,10 +33,25 @@ function validator(fields: Fields, options: Options = {}): RequestHandler {
 		minLengthMessage = 'Property "[prop]" must have a minimum length of [length]',
 		maxLengthMessage = 'Property "[prop]" must have a maximum length of [length]',
 		regexMessage = 'Property "[prop]" must match regex [regex]',
+		allowOther = false,
+		otherPropertyMessage = 'Property "[prop]" is not allowed',
 	} = options;
 
 	return (req, res, next) => {
-		for (const field in fields) {
+		const fieldNames = Object.keys(fields);
+		if (!allowOther) {
+			const invalid = Object.keys(req.body).find(
+				key => !fieldNames.includes(key)
+			);
+			if (invalid) {
+				return res.status(failStatus).json({
+					status: failStatus,
+					message: otherPropertyMessage.replace(/\[prop\]/g, invalid),
+				});
+			}
+		}
+
+		for (const field of fieldNames) {
 			// Get field options
 			let opts = fields[field];
 			if (typeof opts === 'string') opts = { type: opts };
