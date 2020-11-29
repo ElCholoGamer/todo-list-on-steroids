@@ -25,7 +25,7 @@ const Account: React.FC<Props> = ({ user }) => {
 			<br />
 			<h5>Your bio:</h5>
 			<p className="rounded border border-secondary p-3">
-				{bio || "(You don't have a bio yet!)"}
+				{bio || <span className="font-italic">You don't have a bio yet!</span>}
 			</p>
 			<hr />
 			<Button href={`${match.path}/edit`}>Edit Account</Button>

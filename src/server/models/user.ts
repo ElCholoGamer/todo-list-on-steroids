@@ -16,7 +16,7 @@ export interface IUser extends Document {
 const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
-	bio: { type: String, required: true, default: '', trim: true },
+	bio: { type: String, trim: true },
 });
 
 UserSchema.methods.getTodoList = async function () {

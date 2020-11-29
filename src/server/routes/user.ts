@@ -23,7 +23,7 @@ router.put(
 		bio: { type: 'string', required: false },
 	}),
 	asyncHandler(async (req, res) => {
-		const { username, bio = '' } = req.body;
+		const { username, bio } = req.body;
 
 		const existing = await User.findOne({ username });
 		if (existing && existing?._id.toString() !== req.user!._id.toString()) {
