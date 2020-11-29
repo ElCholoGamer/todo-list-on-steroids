@@ -18,7 +18,7 @@ const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
 	bio: { type: String, trim: true },
-	avatar: { type: String, required: true, default: false },
+	avatar: { type: Boolean, required: true, default: false },
 });
 
 UserSchema.methods.getTodoList = async function () {

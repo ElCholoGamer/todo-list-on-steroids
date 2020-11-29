@@ -70,14 +70,14 @@ router.put(
 router.delete(
 	'/',
 	asyncHandler(async (req, res) => {
-		if (req.user!.avatar) {
+		if (!req.user!.avatar) {
 			return res.status(404).json({
 				status: 404,
 				message: 'User avatar not available',
 			});
 		}
 
-		await Avatar.findByIdAndDelete({ _id: req.user!._id });
+		await Avatar.findByIdAndDelete(req.user!._id);
 
 		req.user!.avatar = false;
 		await req.user!.save();
@@ -85,6 +85,7 @@ router.delete(
 		res.json({
 			status: 200,
 			message: 'Avatar deleted successfully',
+			user: req.user,
 		});
 	})
 );
