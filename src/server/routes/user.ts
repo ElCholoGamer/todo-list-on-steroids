@@ -36,7 +36,7 @@ router.put(
 		req.user!.bio = bio;
 		req.user!.username = username;
 
-		await req.user?.save();
+		await req.user!.save();
 		res.json({
 			status: 200,
 			user: req.user,
@@ -84,10 +84,7 @@ router.put(
 			await req.user!.save();
 		}
 
-		res.json({
-			status: 200,
-			picture,
-		});
+		res.contentType(mimetype).send(buffer);
 	})
 );
 
@@ -96,10 +93,15 @@ router.get(
 	'/avatar',
 	asyncHandler(async (req, res) => {
 		const picture = await req.user!.getAvatar();
-		res.json({
-			status: 200,
-			picture,
-		});
+		if (!picture) {
+			res.status(404).json({
+				status: 404,
+				message: 'Avatar not available',
+			});
+		} else {
+			const { contentType, data } = picture;
+			res.contentType(contentType).send(data);
+		}
 	})
 );
 

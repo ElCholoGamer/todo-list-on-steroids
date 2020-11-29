@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -8,30 +7,13 @@ import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
 import DefaultPicture from '../assets/default_profile.png';
 import { User } from '../utils';
+import LazyImage from './LazyImage';
 
 interface Props {
 	user: User | null;
 }
 
 const Header: React.FC<Props> = ({ user }) => {
-	const [picture, setPicture] = React.useState(DefaultPicture);
-
-	React.useEffect(() => {
-		if (!user?.avatar) return;
-
-		// Get and set user avatar
-		axios
-			.get('/user/avatar')
-			.then(res => {
-				const bytes = new Uint8Array(res.data.picture.data.data);
-				const reader = new FileReader();
-
-				reader.onload = e => setPicture(e.target?.result);
-				reader.readAsDataURL(new Blob([bytes.buffer]));
-			})
-			.catch(console.error);
-	}, [user]);
-
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.currentTarget.disabled = true; // Disable button
 
@@ -67,8 +49,9 @@ const Header: React.FC<Props> = ({ user }) => {
 							Logged in as:{' '}
 							<a href="/account" className="text-light font-weight-bold">
 								{user.username}
-								<img
-									src={picture}
+								<LazyImage
+									src={'/user/avatar'}
+									fallbackSrc={DefaultPicture}
 									className="mx-2 rounded-circle"
 									width={40}
 									height={40}
