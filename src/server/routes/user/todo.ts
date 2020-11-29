@@ -1,6 +1,6 @@
 import express from 'express';
-import asyncHandler from '../middleware/async-handler';
-import validator from '../middleware/validator';
+import asyncHandler from '../../middleware/async-handler';
+import validator from '../../middleware/validator';
 
 const router = express.Router();
 
