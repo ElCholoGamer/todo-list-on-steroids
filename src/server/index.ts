@@ -67,10 +67,10 @@ if (!process.argv.includes('--dev')) {
 }
 
 // Database connection
+console.log('Connecting to database...');
 initDatabase()
-	.then(() => {
-		console.log('Database connected');
-
+	.then(async () => {
+		console.log('Database connected!');
 		const { PORT = 5000 } = process.env;
 		app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
 	})
