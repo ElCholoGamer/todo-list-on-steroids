@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -37,8 +37,14 @@ const EditAccount: React.FC<Props> = ({ user }) => {
 		currentTarget.disabled = true;
 		axios
 			.put('/user', data)
-			.then(() => setMessage(['success', 'User updated']))
-			.catch(console.error)
+			.then(() => {
+				setMessage(['success', 'User updated successfully. Reloading page...']);
+				setTimeout(() => (location.href = '/account'), 1000);
+			})
+			.catch((err: AxiosError) => {
+				console.error(err);
+				setMessage(['danger', err.response?.data?.message || 'Unknown error']);
+			})
 			.finally(() => (currentTarget.disabled = false));
 	};
 
@@ -71,7 +77,10 @@ const EditAccount: React.FC<Props> = ({ user }) => {
 					/>
 				</Form.Group>
 
-				<Button variant="primary" onClick={handleClick}>
+				<Button
+					disabled={username === user.username}
+					variant="primary"
+					onClick={handleClick}>
 					Save Changes
 				</Button>
 			</Form>

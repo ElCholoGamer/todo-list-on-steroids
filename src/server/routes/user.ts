@@ -1,6 +1,7 @@
 import express from 'express';
 import checkAuth from '../middleware/check-auth';
 import validator from '../middleware/validator';
+import User from '../models/user';
 import todoRouter from './todo';
 
 const router = express.Router();
@@ -20,10 +21,18 @@ router.put(
 	}),
 	async (req, res) => {
 		const { username, bio = '' } = req.body;
+
+		if (await User.findOne({ username })) {
+			return res.status(409).json({
+				status: 409,
+				message: 'Username already exists',
+			});
+		}
+
 		req.user!.bio = bio;
 		req.user!.username = username;
-		await req.user?.save();
 
+		await req.user?.save();
 		res.json({
 			status: 200,
 			user: req.user,
