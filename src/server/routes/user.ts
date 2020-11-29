@@ -11,15 +11,25 @@ router.use('/todo', todoRouter); // Sub-router for Todo Lists
 // Send user info
 router.get('/', (req, res) => res.json({ status: 200, user: req.user }));
 
-router.put('/bio', validator({ bio: 'string' }), async (req, res) => {
-	req.user!.bio = req.body.bio;
-	await req.user?.save();
+// Get update user
+router.put(
+	'/',
+	validator({
+		username: { type: 'string', minLength: 1 },
+		bio: { type: 'string', required: false },
+	}),
+	async (req, res) => {
+		const { username, bio = '' } = req.body;
+		req.user!.bio = bio;
+		req.user!.username = username;
+		await req.user?.save();
 
-	res.json({
-		status: 200,
-		user: req.user,
-	});
-});
+		res.json({
+			status: 200,
+			user: req.user,
+		});
+	}
+);
 
 router.post('/logout', (req, res) => {
 	// Log out user session
