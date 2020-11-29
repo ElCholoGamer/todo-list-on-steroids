@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import FooterInput from '../components/FooterInput';
+import PlaceholderText from '../components/PlaceholderText';
 import TodoItem from '../components/TodoItem';
 import { ITodoItem, User } from '../utils';
 
@@ -14,12 +15,19 @@ const TodoPage: React.FC<Props> = ({ user }) => {
 	// Get Todo List when user is available
 	React.useEffect(() => {
 		if (!user) return;
+		let mounted = true;
 
 		// Get Todo List from server
 		axios
 			.get('/user/todo')
-			.then(res => setItems(res.data.items))
+			.then(res => {
+				if (mounted) setItems(res.data.items);
+			})
 			.catch(console.error);
+
+		return () => {
+			mounted = false;
+		};
 	}, [user]);
 
 	// Post new Todo item
@@ -47,11 +55,7 @@ const TodoPage: React.FC<Props> = ({ user }) => {
 	};
 
 	if (!user) {
-		return (
-			<div className="container text-center d-flex min-vh mt-5">
-				<h3 className="m-auto">Log in to access your Todo List!</h3>
-			</div>
-		);
+		return <PlaceholderText>Log in to access your Todo List!</PlaceholderText>;
 	}
 
 	return (
@@ -63,7 +67,7 @@ const TodoPage: React.FC<Props> = ({ user }) => {
 				{!items ? (
 					<h3 className="text-center">Loading list...</h3>
 				) : !items.length ? (
-					<h3 className="text-center">You don't have anything to-do!</h3>
+					<h4 className="text-center">You don't have anything to-do!</h4>
 				) : (
 					items.map(item => (
 						<TodoItem
@@ -77,7 +81,7 @@ const TodoPage: React.FC<Props> = ({ user }) => {
 					))
 				)}
 			</div>
-			<FooterInput addTodo={addTodo} />
+			{items && <FooterInput addTodo={addTodo} />}
 		</div>
 	);
 };
