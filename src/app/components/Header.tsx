@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
+import DefaultPicture from '../assets/default_profile.png';
 import { User } from '../utils';
 
 interface Props {
@@ -44,7 +45,16 @@ const Header: React.FC<Props> = ({ user }) => {
 						</ButtonGroup>
 					) : (
 						<>
-							Logged in as: <span className="text-light">{user.username}</span>
+							Logged in as:{' '}
+							<a href="/account" className="text-light font-weight-bold">
+								{user.username}
+								<img
+									src={DefaultPicture}
+									className="mx-2"
+									width={40}
+									height={40}
+								/>
+							</a>
 							<Button
 								className="ml-3"
 								variant="outline-danger"
