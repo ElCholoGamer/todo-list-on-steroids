@@ -22,7 +22,8 @@ router.put(
 	async (req, res) => {
 		const { username, bio = '' } = req.body;
 
-		if (await User.findOne({ username })) {
+		const existing = await User.findOne({ username });
+		if (existing && existing?._id.toString() !== req.user!._id.toString()) {
 			return res.status(409).json({
 				status: 409,
 				message: 'Username already exists',

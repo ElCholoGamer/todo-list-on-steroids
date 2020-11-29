@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/esm/Button';
 import { useRouteMatch } from 'react-router-dom';
 import PlaceholderText from '../../components/PlaceholderText';
 import { User } from '../../utils';
@@ -26,6 +27,8 @@ const Account: React.FC<Props> = ({ user }) => {
 			<p className="rounded border border-secondary p-3">
 				{bio || "(You don't have a bio yet!)"}
 			</p>
+			<hr />
+			<Button href={`${match.path}/edit`}>Edit Account</Button>
 		</div>
 	);
 };

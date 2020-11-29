@@ -3,7 +3,6 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import Loading from './components/Loading';
-import EditAccount from './pages/Account/EditAccount';
 import { User } from './utils';
 
 const Home = React.lazy(() => import('./pages/Home'));
@@ -11,6 +10,7 @@ const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Account = React.lazy(() => import('./pages/Account'));
 const TodoPage = React.lazy(() => import('./pages/TodoPage'));
+const EditAccount = React.lazy(() => import('./pages/Account/EditAccount'));
 
 const App: React.FC = () => {
 	const [user, setUser] = React.useState<User | null>(null);

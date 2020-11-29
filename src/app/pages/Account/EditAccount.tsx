@@ -42,10 +42,10 @@ const EditAccount: React.FC<Props> = ({ user }) => {
 				setTimeout(() => (location.href = '/account'), 1000);
 			})
 			.catch((err: AxiosError) => {
+				currentTarget.disabled = false;
 				console.error(err);
 				setMessage(['danger', err.response?.data?.message || 'Unknown error']);
-			})
-			.finally(() => (currentTarget.disabled = false));
+			});
 	};
 
 	const { username, bio } = data;
