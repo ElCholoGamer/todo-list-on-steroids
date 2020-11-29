@@ -26,18 +26,20 @@ const EditAccount: React.FC<Props> = ({ user }) => {
 		return <PlaceholderText>Log in to edit your account</PlaceholderText>;
 	}
 
-	const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleClick = ({
+		currentTarget,
+	}: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		if (!username) {
 			setMessage(['danger', 'You must provide a username lol']);
 			return;
 		}
-		e.currentTarget.disabled = true;
 
+		currentTarget.disabled = true;
 		axios
 			.put('/user', data)
 			.then(() => setMessage(['success', 'User updated']))
 			.catch(console.error)
-			.finally(() => (e.currentTarget.disabled = false));
+			.finally(() => (currentTarget.disabled = false));
 	};
 
 	const { username, bio } = data;
