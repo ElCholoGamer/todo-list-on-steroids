@@ -1,12 +1,15 @@
 import React from 'react';
-import PlaceholderText from '../components/PlaceholderText';
-import { User } from '../utils';
+import { useRouteMatch } from 'react-router-dom';
+import PlaceholderText from '../../components/PlaceholderText';
+import { User } from '../../utils';
 
 interface Props {
 	user: User | null;
 }
 
 const Account: React.FC<Props> = ({ user }) => {
+	const match = useRouteMatch();
+
 	if (!user) {
 		return <PlaceholderText>Log in to access your account</PlaceholderText>;
 	}
