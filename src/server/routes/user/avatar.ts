@@ -56,12 +56,6 @@ router.put(
 		picture.contentType = mimetype;
 		await picture.save();
 
-		// Enable avatar in user
-		if (!req.user!.avatar) {
-			req.user!.avatar = true;
-			await req.user!.save();
-		}
-
 		res.contentType(mimetype).send(buffer);
 	})
 );
@@ -70,18 +64,15 @@ router.put(
 router.delete(
 	'/',
 	asyncHandler(async (req, res) => {
-		if (!req.user!.avatar) {
+		const avatar = await req.user!.getAvatar();
+		if (!avatar) {
 			return res.status(404).json({
 				status: 404,
 				message: 'User avatar not available',
 			});
 		}
 
-		await Avatar.findByIdAndDelete(req.user!._id);
-
-		req.user!.avatar = false;
-		await req.user!.save();
-
+		await avatar.deleteOne();
 		res.json({
 			status: 200,
 			message: 'Avatar deleted successfully',

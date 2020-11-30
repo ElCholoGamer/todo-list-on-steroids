@@ -7,7 +7,6 @@ export interface IUser extends Document {
 	username: string;
 	password: string;
 	bio?: string;
-	avatar: boolean;
 	getTodoList(): Promise<ITodoList>;
 	encryptPassword(): void;
 	comparePassword(password: string): boolean;
@@ -18,7 +17,6 @@ const UserSchema = new Schema({
 	username: { type: String, required: true, trim: true },
 	password: { type: String, required: true },
 	bio: { type: String, trim: true },
-	avatar: { type: Boolean, required: true, default: false },
 });
 
 UserSchema.methods.getTodoList = async function () {
